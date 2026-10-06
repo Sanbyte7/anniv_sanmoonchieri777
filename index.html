@@ -1,0 +1,1543 @@
+<!doctype html>
+<html lang="id" class="js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Our Little Love Story 💌</title>
+    <meta name="description" content="Website anniversary kecil, dibuat dengan penuh perhatian." />
+
+    <style>
+      /* ============================================================
+   1. DASAR & WARNA
+   Ganti warna favorit pacar lewat variabel --aksen (diisi JS
+   dari bagian CONFIG, jadi tidak perlu ubah CSS ini).
+   ============================================================ */
+      :root {
+        --pink-muda: #ffeaf1;
+        --pink: #ffd9e6;
+        --pink-tua: #ffbbd1;
+        --krem: #fff9f0;
+        --krem-2: #fff3e2;
+        --tinta: #4a3a45; /* warna teks utama (kontras aman) */
+        --tinta-lembut: #6b5765;
+        --cta: #c93b66; /* tombol utama (teks putih kontras cukup) */
+        --cta-tua: #a82c53;
+        --aksen: #7ec8e3; /* diisi dari CONFIG.warnaFavorit */
+        --bayangan: 0 10px 30px rgba(214, 140, 170, 0.2);
+        --radius: 28px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          Roboto,
+          Arial,
+          sans-serif;
+        color: var(--tinta);
+        line-height: 1.7;
+        background-color: var(--krem);
+        background-image:
+          radial-gradient(circle at 12% 18%, rgba(255, 217, 230, 0.75) 0 14%, transparent 40%),
+          radial-gradient(circle at 88% 12%, rgba(255, 243, 226, 0.9) 0 12%, transparent 45%),
+          radial-gradient(circle at 50% 95%, rgba(255, 217, 230, 0.55) 0 20%, transparent 55%);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      .wrap {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 16px;
+      }
+
+      /* Judul pakai gaya tulisan tangan supaya terasa seperti scrapbook */
+      .judul-bagian {
+        font-family: "Segoe Print", "Comic Sans MS", "Bradley Hand", cursive;
+        font-size: clamp(1.5rem, 6vw, 2.1rem);
+        margin: 0 0 6px;
+        color: var(--cta-tua);
+        text-align: center;
+      }
+      .sub-judul {
+        text-align: center;
+        margin: 0 auto 22px;
+        max-width: 620px;
+        color: var(--tinta-lembut);
+      }
+
+      section {
+        padding: 42px 0;
+        scroll-margin-top: 12px;
+      }
+
+      /* ============================================================
+   2. TOMBOL (jelas, besar, aman untuk jempol di HP)
+   ============================================================ */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 48px;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 999px;
+        font-size: 1rem;
+        font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        text-align: center;
+        transition:
+          transform 0.18s ease,
+          box-shadow 0.18s ease,
+          background-color 0.18s ease;
+      }
+      .btn:active {
+        transform: scale(0.97);
+      }
+      .btn-utama {
+        background: var(--cta);
+        color: #fff;
+        box-shadow: 0 8px 18px rgba(201, 59, 102, 0.3);
+      }
+      .btn-utama:hover {
+        background: var(--cta-tua);
+      }
+      .btn-cadangan {
+        background: #fff;
+        color: var(--cta-tua);
+        border: 2px solid var(--cta);
+      }
+      .btn-cadangan:hover {
+        background: var(--pink-muda);
+      }
+
+      :focus-visible {
+        outline: 3px solid #1f6feb;
+        outline-offset: 3px;
+        border-radius: 8px;
+      }
+
+      /* ============================================================
+   3. HALAMAN PEMBUKA (amplop)
+   ============================================================ */
+      #layar-buka {
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 24px;
+        background-color: var(--krem);
+        background-image: radial-gradient(circle at 50% 40%, #fff 0%, var(--pink-muda) 70%);
+        transition:
+          opacity 0.5s ease,
+          visibility 0.5s ease;
+      }
+      #layar-buka.tutup {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .amplop-btn {
+        background: none;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        font-family: inherit;
+        color: inherit;
+      }
+      .amplop-gambar {
+        width: min(78vw, 300px);
+        height: auto;
+        display: block;
+        filter: drop-shadow(0 14px 24px rgba(201, 59, 102, 0.28));
+        transition: transform 0.3s ease;
+      }
+      .amplop-btn:hover .amplop-gambar {
+        transform: translateY(-6px) rotate(-1.5deg);
+      }
+
+      .teks-buka-1 {
+        font-family: "Segoe Print", "Comic Sans MS", cursive;
+        font-size: clamp(1.3rem, 6vw, 1.8rem);
+        margin: 22px 0 6px;
+        color: var(--cta-tua);
+      }
+      .teks-buka-2 {
+        margin: 0;
+        color: var(--tinta-lembut);
+      }
+
+      /* Animasi membuka: amplop terangkat, surat keluar, layar menutup */
+      @keyframes amplop-angkat {
+        0% {
+          transform: translateY(0) scale(1);
+          opacity: 1;
+        }
+        45% {
+          transform: translateY(-26px) scale(1.06) rotate(2deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-70px) scale(1.25) rotate(-3deg);
+          opacity: 0;
+        }
+      }
+      @keyframes surat-keluar {
+        0% {
+          transform: translateY(30px) scale(0.8);
+          opacity: 0;
+        }
+        60% {
+          transform: translateY(-10px) scale(1.02);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-40px) scale(1.4);
+          opacity: 0;
+        }
+      }
+      #layar-buka.buka .amplop-btn {
+        animation: amplop-angkat 1.1s ease forwards;
+      }
+      #layar-buka.buka .teks-buka-1,
+      #layar-buka.buka .teks-buka-2 {
+        animation: surat-keluar 0.9s ease forwards;
+      }
+
+      /* ============================================================
+   4. KARTU, HIASAN, MULAI HALAMAN UTAMA
+   ============================================================ */
+      .kartu {
+        background: #fff;
+        border: 1px solid #ffe1eb;
+        border-radius: var(--radius);
+        box-shadow: var(--bayangan);
+        padding: 22px;
+      }
+
+      #konten[hidden] {
+        display: none;
+      }
+
+      .hero {
+        text-align: center;
+        padding-top: 46px;
+      }
+      .hero h1 {
+        font-family: "Segoe Print", "Comic Sans MS", cursive;
+        font-size: clamp(1.7rem, 7vw, 2.7rem);
+        margin: 12px 0 8px;
+        color: var(--cta-tua);
+        line-height: 1.3;
+      }
+      .hero .kalimat-cinta {
+        font-size: clamp(1rem, 4vw, 1.2rem);
+        margin: 0 auto 18px;
+        max-width: 560px;
+      }
+
+      .pita {
+        display: inline-block;
+        background: var(--aksen);
+        color: #20323b;
+        font-weight: 700;
+        font-size: 0.85rem;
+        padding: 6px 16px;
+        border-radius: 999px;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+      }
+      .hari-box {
+        background: #fff;
+        border: 2px dashed var(--pink-tua);
+        border-radius: 24px;
+        padding: 18px;
+        margin: 0 auto 20px;
+        max-width: 460px;
+      }
+      .hari-angka {
+        font-family: "Segoe Print", "Comic Sans MS", cursive;
+        font-size: clamp(2.4rem, 12vw, 3.6rem);
+        color: var(--cta);
+        line-height: 1.1;
+        display: block;
+      }
+      .hari-keterangan {
+        margin: 4px 0 0;
+        color: var(--tinta-lembut);
+        font-size: 0.95rem;
+      }
+
+      .hiasan-emoji {
+        font-size: 1.4rem;
+        user-select: none;
+      }
+      .dekorasi {
+        position: absolute;
+        font-size: 1.5rem;
+        opacity: 0.55;
+        pointer-events: none;
+        animation: goyang 4.5s ease-in-out infinite;
+      }
+      @keyframes goyang {
+        0%,
+        100% {
+          transform: translateY(0) rotate(-6deg);
+        }
+        50% {
+          transform: translateY(-8px) rotate(6deg);
+        }
+      }
+      .hero {
+        position: relative;
+      }
+
+      /* Dua kucing lucu */
+      .kucing-wrap {
+        margin: 8px auto 0;
+        max-width: 340px;
+      }
+      .kucing {
+        width: 100%;
+        height: auto;
+      }
+
+      /* ============================================================
+   5. GALERI KENANGAN (kartu polaroid)
+   ============================================================ */
+      .kartu-kenangan-favorit {
+        background: linear-gradient(135deg, #fff, var(--krem-2));
+        border-radius: 24px;
+        padding: 18px 20px;
+        border-left: 8px solid var(--aksen);
+        margin-bottom: 22px;
+        box-shadow: var(--bayangan);
+      }
+      .kartu-kenangan-favorit h3 {
+        margin: 0 0 4px;
+        font-size: 1.05rem;
+        color: var(--cta-tua);
+      }
+      .kartu-kenangan-favorit p {
+        margin: 0;
+      }
+
+      .galeri-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+      .polaroid {
+        background: #fff;
+        border: 1px solid #f1e6dc;
+        border-radius: 14px;
+        padding: 10px 10px 14px;
+        box-shadow: var(--bayangan);
+        cursor: pointer;
+        text-align: left;
+        font-family: inherit;
+        color: inherit;
+        transform: rotate(-1.2deg);
+        transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease;
+        display: block;
+        width: 100%;
+      }
+      .polaroid:nth-child(even) {
+        transform: rotate(1.4deg);
+      }
+      .polaroid:hover,
+      .polaroid:focus-visible {
+        transform: translateY(-6px) rotate(0deg);
+        box-shadow: 0 16px 34px rgba(214, 140, 170, 0.32);
+      }
+      .polaroid img {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: 6px;
+        background: var(--pink-muda);
+      }
+      .polaroid .caption {
+        font-family: "Segoe Print", "Comic Sans MS", cursive;
+        margin: 10px 2px 0;
+        font-size: 0.98rem;
+        color: var(--tinta);
+        text-align: center;
+      }
+      .polaroid .petunjuk-kecil {
+        display: block;
+        font-size: 0.76rem;
+        color: var(--tinta-lembut);
+        font-family: inherit;
+        text-align: center;
+      }
+
+      /* ============================================================
+   6. MODAL (foto + cerita)
+   ============================================================ */
+      .modal {
+        position: fixed;
+        inset: 0;
+        z-index: 70;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        background: rgba(60, 34, 48, 0.55);
+        backdrop-filter: blur(3px);
+      }
+      .modal[hidden] {
+        display: none;
+      }
+      .modal-isi {
+        background: #fff;
+        border-radius: 26px;
+        max-width: 520px;
+        width: 100%;
+        max-height: 88vh;
+        overflow-y: auto;
+        padding: 16px 16px 22px;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+        position: relative;
+        animation: pop 0.28s ease;
+      }
+      @keyframes pop {
+        from {
+          transform: scale(0.94);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .modal-isi img {
+        width: 100%;
+        border-radius: 16px;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+      }
+      .modal-isi h3 {
+        font-family: "Segoe Print", "Comic Sans MS", cursive;
+        margin: 14px 44px 6px 4px;
+        color: var(--cta-tua);
+      }
+      .modal-isi p {
+        margin: 0 4px;
+        white-space: pre-line;
+      }
+      .tutup-x {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: none;
+        background: var(--cta);
+        color: #fff;
+        font-size: 1.3rem;
+        font-weight: 700;
+        cursor: pointer;
+        line-height: 1;
+      }
+
+      /* ============================================================
+   7. ALASAN SAYANG
+   ============================================================ */
+      .kotak-alasan {
+        min-height: 110px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background: var(--pink-muda);
+        border-radius: 24px;
+        padding: 20px;
+        margin: 18px 0;
+        font-size: clamp(1.05rem, 4.5vw, 1.3rem);
+        font-family: "Segoe Print", "Comic Sans MS", cursive;
+        color: var(--cta-tua);
+      }
+      @keyframes muncul {
+        from {
+          opacity: 0;
+          transform: translateY(10px) scale(0.97);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .alasan-baru {
+        animation: muncul 0.4s ease;
+      }
+      .alasan-kosong {
+        font-family: inherit;
+        font-size: 1rem;
+        color: var(--tinta-lembut);
+      }
+
+      /* ============================================================
+   8. MINI GAME CARI HATI
+   ============================================================ */
+      .area-hati {
+        position: relative;
+        height: 260px;
+        background: repeating-linear-gradient(45deg, #fff 0 14px, #fff6f9 14px 28px);
+        border: 2px dashed var(--pink-tua);
+        border-radius: 24px;
+        margin: 16px 0;
+      }
+      .hati {
+        position: absolute;
+        transform: translateX(-50%);
+        width: 56px;
+        height: 56px;
+        border: none;
+        background: none;
+        font-size: 2.3rem;
+        cursor: pointer;
+        line-height: 1;
+        padding: 0;
+        animation: detak 1.8s ease-in-out infinite;
+        transition:
+          transform 0.2s ease,
+          opacity 0.2s ease;
+      }
+      @keyframes detak {
+        0%,
+        100% {
+          transform: translateX(-50%) scale(1);
+        }
+        50% {
+          transform: translateX(-50%) scale(1.14);
+        }
+      }
+      .hati:hover {
+        transform: translateX(-50%) scale(1.15);
+      }
+      .hati.ketemu {
+        opacity: 0.28;
+        animation: none;
+        transform: translateX(-50%) scale(0.85);
+        cursor: default;
+        filter: grayscale(1);
+      }
+      .hati:disabled {
+        cursor: default;
+      }
+      .progres-hati {
+        text-align: center;
+        font-weight: 700;
+        color: var(--cta-tua);
+        margin: 6px 0;
+      }
+      .pesan-hadiah {
+        display: none;
+        text-align: center;
+        background: var(--krem-2);
+        border: 2px solid var(--aksen);
+        border-radius: 20px;
+        padding: 16px;
+        font-weight: 700;
+        color: var(--tinta);
+      }
+      .pesan-hadiah.tampil {
+        display: block;
+        animation: muncul 0.5s ease;
+      }
+
+      /* ============================================================
+   9. SURAT
+   ============================================================ */
+      .tombol-surat {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+      }
+      #kotak-surat {
+        margin-top: 18px;
+        background: #fffdf8;
+        border: 1px solid #f0e2d3;
+        border-radius: 20px;
+        padding: 22px;
+        white-space: pre-line;
+        font-family: "Segoe Print", "Comic Sans MS", cursive;
+        font-size: 1.02rem;
+        color: #3f3038;
+        box-shadow: inset 0 0 0 4px #fff6ec;
+      }
+      #kotak-surat[hidden] {
+        display: none;
+      }
+      .kursor-ketik {
+        display: inline-block;
+        width: 2px;
+        height: 1.1em;
+        background: var(--cta);
+        vertical-align: -3px;
+        animation: kedip 0.8s steps(1) infinite;
+      }
+      @keyframes kedip {
+        50% {
+          opacity: 0;
+        }
+      }
+
+      /* ============================================================
+   10. KEJUTAN TERAKHIR & FOOTER
+   ============================================================ */
+      .tanya {
+        text-align: center;
+        font-family: "Segoe Print", "Comic Sans MS", cursive;
+        font-size: clamp(1.25rem, 5.5vw, 1.7rem);
+        color: var(--cta-tua);
+        margin: 0 0 18px;
+      }
+      .tombol-jawab {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        max-width: 420px;
+        margin: 0 auto;
+      }
+      .jawaban {
+        display: none;
+        margin-top: 18px;
+        text-align: center;
+        background: var(--pink-muda);
+        border-radius: 20px;
+        padding: 16px;
+        font-weight: 700;
+        color: var(--tinta);
+      }
+      .jawaban.tampil {
+        display: block;
+        animation: muncul 0.45s ease;
+      }
+
+      footer {
+        text-align: center;
+        padding: 30px 16px 90px;
+        color: var(--tinta-lembut);
+        font-size: 0.92rem;
+      }
+
+      /* Tombol musik (mengambang) */
+      #btn-musik {
+        position: fixed;
+        right: 14px;
+        bottom: 14px;
+        z-index: 55;
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        background: var(--cta);
+        color: #fff;
+        font-size: 1.35rem;
+        cursor: pointer;
+        box-shadow: 0 10px 22px rgba(201, 59, 102, 0.35);
+      }
+      #toast {
+        position: fixed;
+        left: 50%;
+        bottom: 82px;
+        transform: translateX(-50%);
+        background: #33222b;
+        color: #fff;
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-size: 0.9rem;
+        z-index: 56;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        max-width: 90vw;
+        text-align: center;
+      }
+      #toast.tampil {
+        opacity: 1;
+      }
+
+      /* Confetti */
+      .confetti-wadah {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 80;
+        overflow: hidden;
+      }
+      .biji {
+        position: absolute;
+        top: -4vh;
+        width: 10px;
+        height: 16px;
+        border-radius: 3px;
+        animation: jatuh linear forwards;
+      }
+      @keyframes jatuh {
+        0% {
+          transform: translateY(0) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(105vh) rotate(720deg);
+          opacity: 0.9;
+        }
+      }
+
+      /* Muncul saat di-scroll (hanya jika JS aktif) */
+      .js .reveal {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      .js .reveal.tampil {
+        opacity: 1;
+        transform: none;
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+
+      /* ============================================================
+   11. TAMPILAN LEBAR (laptop)
+   ============================================================ */
+      @media (min-width: 760px) {
+        .galeri-grid {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 22px;
+        }
+        .kartu {
+          padding: 30px;
+        }
+        .tombol-jawab {
+          flex-direction: row;
+          max-width: none;
+          justify-content: center;
+        }
+        .tombol-jawab .btn {
+          flex: 0 1 260px;
+        }
+        .area-hati {
+          height: 300px;
+        }
+      }
+
+      /* ============================================================
+   12. HORMATI PREFERS-REDUCED-MOTION
+   Matikan animasi untuk pengguna yang tidak nyaman dengan gerakan.
+   ============================================================ */
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.001ms !important;
+        }
+        .js .reveal {
+          opacity: 1;
+          transform: none;
+        }
+      }
+    </style>
+
+    <script>
+      // Ditandai sejak awal: kalau JS mati, konten tetap terlihat (tidak hilang).
+      document.documentElement.classList.add("js");
+    </script>
+  </head>
+
+  <body>
+    <!-- ============================================================
+     LAYAR PEMBUKA: AMPLOP
+     ============================================================ -->
+    <div id="layar-buka">
+      <button class="amplop-btn" id="btn-amplop" aria-label="Buka surat">
+        <!-- Amplop digambar sendiri pakai SVG (tanpa gambar eksternal) -->
+        <svg class="amplop-gambar" viewBox="0 0 300 200" role="img" aria-hidden="true">
+          <rect x="6" y="30" width="288" height="164" rx="18" fill="#FFD9E6" stroke="#FFB3CC" stroke-width="4" />
+          <path d="M6 44 L150 138 L294 44" fill="none" stroke="#FFB3CC" stroke-width="4" />
+          <path d="M6 190 L118 108 M294 190 L182 108" stroke="#FFC7DA" stroke-width="4" />
+          <path d="M6 48 L150 142 L294 48 L286 30 L150 118 L14 30 Z" fill="#FFEAF1" />
+          <!-- pita -->
+          <path d="M150 60 m-46 0 q10 -26 46 -8 q36 -18 46 8 q-16 14 -46 12 q-30 2 -46 -12 z" fill="#C93B66" />
+          <circle cx="150" cy="63" r="11" fill="#A82C53" />
+          <!-- hati kecil -->
+          <path
+            d="M150 150 c-14 -12 -30 -20 -30 -34 c0 -9 8 -15 16 -15 c6 0 11 3 14 8 c3 -5 8 -8 14 -8 c8 0 16 6 16 15 c0 14 -16 22 -30 34 z"
+            fill="#FF6F9C"
+          />
+        </svg>
+      </button>
+      <p class="teks-buka-1">Ada surat kecil buat kamu 💌</p>
+      <p class="teks-buka-2">Dibuka sama orang paling cantik aja ya.</p>
+    </div>
+
+    <!-- ============================================================
+     KONTEN UTAMA
+     ============================================================ -->
+    <main id="konten" hidden>
+      <!-- ---------- 1. UCAPAN ANNIVERSARY ---------- -->
+      <section class="hero wrap" id="atas">
+        <span class="pita" id="pita-ke">Anniversary ke-</span>
+
+        <h1 id="judul-ucapan">Happy Anniversary! 💗</h1>
+
+        <p class="kalimat-cinta">Kalau disuruh milih lagi, aku tetap pilih kamu.</p>
+
+        <div class="hari-box">
+          <span class="hari-angka" id="hari-angka">…</span>
+          <p class="hari-keterangan" id="hari-keterangan">hari kita bersama</p>
+        </div>
+
+        <button class="btn btn-utama" id="btn-cerita">Lihat cerita kita ✨</button>
+
+        <!-- Ilustrasi dua kucing lucu (SVG buatan sendiri) -->
+        <div class="kucing-wrap">
+          <svg
+            class="kucing"
+            viewBox="0 0 300 170"
+            role="img"
+            aria-label="Ilustrasi dua kucing lucu duduk berdampingan sambil memegang hati"
+          >
+            <!-- hati di tengah -->
+            <path
+              d="M150 96 c-16 -14 -34 -23 -34 -39 c0 -11 9 -18 19 -18 c7 0 12 4 15 9 c3 -5 8 -9 15 -9 c10 0 19 7 19 18 c0 16 -18 25 -34 39 z"
+              fill="#FF6F9C"
+            />
+
+            <!-- KUCING KIRI (oranye krem) -->
+            <g>
+              <path d="M62 148 q-6 -46 22 -60 q30 -15 46 8 q14 20 6 52 z" fill="#FFD9A8" />
+              <path
+                d="M126 142 q30 4 34 -26 q3 -18 -12 -21"
+                stroke="#FFD9A8"
+                stroke-width="13"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <path d="M62 74 L66 44 L90 64 Z" fill="#FFD9A8" />
+              <path d="M136 74 L132 44 L108 64 Z" fill="#FFD9A8" />
+              <path d="M68 70 L71 52 L86 65 Z" fill="#FFB3C7" />
+              <path d="M130 70 L127 52 L112 65 Z" fill="#FFB3C7" />
+              <ellipse cx="99" cy="92" rx="44" ry="37" fill="#FFD9A8" />
+              <circle cx="84" cy="88" r="5" fill="#4A3A45" />
+              <circle cx="114" cy="88" r="5" fill="#4A3A45" />
+              <circle cx="86" cy="86" r="1.8" fill="#fff" />
+              <circle cx="116" cy="86" r="1.8" fill="#fff" />
+              <path d="M95 100 h8 l-4 5 z" fill="#E9738F" />
+              <path
+                d="M99 105 q-7 8 -14 2 M99 105 q7 8 14 2"
+                stroke="#4A3A45"
+                stroke-width="2.4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <circle cx="72" cy="101" r="7" fill="#FF9FB6" opacity=".65" />
+              <circle cx="126" cy="101" r="7" fill="#FF9FB6" opacity=".65" />
+              <path
+                d="M50 96 h14 M50 104 h14 M134 96 h14 M134 104 h14"
+                stroke="#8A7280"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+            </g>
+
+            <!-- KUCING KANAN (abu muda, pakai pita) -->
+            <g>
+              <path d="M168 148 q-8 -44 20 -58 q30 -15 46 8 q14 20 6 50 z" fill="#E7E1EA" />
+              <path
+                d="M236 142 q-30 4 -34 -26 q-3 -18 12 -21"
+                stroke="#E7E1EA"
+                stroke-width="13"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <path d="M170 76 L174 46 L198 66 Z" fill="#E7E1EA" />
+              <path d="M244 76 L240 46 L216 66 Z" fill="#E7E1EA" />
+              <path d="M176 72 L179 54 L194 67 Z" fill="#FFB3C7" />
+              <path d="M238 72 L235 54 L220 67 Z" fill="#FFB3C7" />
+              <ellipse cx="207" cy="94" rx="44" ry="37" fill="#E7E1EA" />
+              <path d="M186 78 q21 -14 42 0 q-6 -22 -21 -22 q-15 0 -21 22 z" fill="#fff" opacity=".7" />
+              <circle cx="192" cy="90" r="5" fill="#4A3A45" />
+              <circle cx="222" cy="90" r="5" fill="#4A3A45" />
+              <circle cx="194" cy="88" r="1.8" fill="#fff" />
+              <circle cx="224" cy="88" r="1.8" fill="#fff" />
+              <path d="M203 102 h8 l-4 5 z" fill="#E9738F" />
+              <path
+                d="M207 107 q-7 8 -14 2 M207 107 q7 8 14 2"
+                stroke="#4A3A45"
+                stroke-width="2.4"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <circle cx="180" cy="103" r="7" fill="#FF9FB6" opacity=".65" />
+              <circle cx="234" cy="103" r="7" fill="#FF9FB6" opacity=".65" />
+              <path
+                d="M158 98 h14 M158 106 h14 M242 98 h14 M242 106 h14"
+                stroke="#8A7280"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+              <!-- pita di kepala -->
+              <path d="M232 56 m-18 0 q4 -14 18 -4 q14 -10 18 4 q-7 9 -18 7 q-11 2 -18 -7 z" fill="#C93B66" />
+              <circle cx="232" cy="57" r="5" fill="#A82C53" />
+            </g>
+          </svg>
+        </div>
+      </section>
+
+      <!-- ---------- 2. GALERI KENANGAN ---------- -->
+      <section class="wrap reveal" id="kenangan">
+        <h2 class="judul-bagian">Galeri Kenangan Kita 📸</h2>
+        <p class="sub-judul">Klik salah satu foto buat baca ceritanya.</p>
+
+        <div class="kartu-kenangan-favorit">
+          <h3>🌸 Kenangan favorit kita</h3>
+          <p id="teks-kenangan-favorit"></p>
+        </div>
+
+        <!-- Diisi otomatis oleh JavaScript dari CONFIG.foto -->
+        <div class="galeri-grid" id="galeri-grid"></div>
+      </section>
+
+      <!-- ---------- 3. ALASAN SAYANG ---------- -->
+      <section class="wrap reveal" id="alasan">
+        <h2 class="judul-bagian">Alasan Aku Sayang Kamu 💕</h2>
+        <p class="sub-judul">Ambil satu kertas, tiap isinya beda.</p>
+
+        <div class="kartu" style="text-align: center">
+          <div class="kotak-alasan" id="kotak-alasan" aria-live="polite">
+            <span class="alasan-kosong">Tekan tombolnya ya 👇</span>
+          </div>
+          <button class="btn btn-utama" id="btn-alasan">Ambil satu alasan 💕</button>
+        </div>
+      </section>
+
+      <!-- ---------- 4. MINI GAME CARI HATI ---------- -->
+      <section class="wrap reveal" id="game">
+        <h2 class="judul-bagian">Cari Hati Tersembunyi 💗</h2>
+        <p class="sub-judul">Ada 5 hati tersembunyi. Ketuk semuanya!</p>
+
+        <div class="kartu">
+          <p class="progres-hati" id="progres-hati" aria-live="polite">0 dari 5 hati terkumpul</p>
+
+          <div class="area-hati" id="area-hati">
+            <!-- 5 tombol hati, posisi ditentukan lewat CONFIG.hati -->
+          </div>
+
+          <div class="pesan-hadiah" id="pesan-hadiah" role="status">
+            Kamu berhasil! Hadiahnya satu peluk panjang dari aku 🤗
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- 5. SURAT ---------- -->
+      <section class="wrap reveal" id="surat">
+        <h2 class="judul-bagian">Surat Untuk Kamu 💌</h2>
+        <p class="sub-judul">Pelannya pelan-pelan ya, dibaca santai aja.</p>
+
+        <div class="kartu" style="text-align: center">
+          <div class="tombol-surat">
+            <button class="btn btn-utama" id="btn-surat">Baca surat dari aku 💌</button>
+            <button class="btn btn-cadangan" id="btn-surat-lengkap" hidden>Tampilkan sekaligus</button>
+          </div>
+
+          <div id="kotak-surat" hidden><span id="isi-surat"></span><span class="kursor-ketik" id="kursor"></span></div>
+        </div>
+      </section>
+
+      <!-- ---------- 6. KEJUTAN TERAKHIR ---------- -->
+      <section class="wrap reveal" id="kejutan">
+        <div class="kartu">
+          <p class="tanya">Mau bikin lebih banyak kenangan bareng aku?</p>
+
+          <div class="tombol-jawab">
+            <button class="btn btn-utama" id="btn-mau">Mau banget 💖</button>
+            <button class="btn btn-cadangan" id="btn-traktir">Mau, tapi traktir dulu 😋</button>
+          </div>
+
+          <div class="jawaban" id="jawaban" role="status"></div>
+        </div>
+      </section>
+
+      <footer>
+        <p>Dibuat dengan penuh perhatian 🤍</p>
+        <p id="tanda-tangan"></p>
+      </footer>
+    </main>
+
+    <!-- ============================================================
+     MODAL FOTO (dapat ditutup dengan tombol X maupun Escape)
+     ============================================================ -->
+    <div class="modal" id="modal" hidden>
+      <div class="modal-isi" role="dialog" aria-modal="true" aria-labelledby="modal-judul">
+        <button class="tutup-x" id="modal-tutup" aria-label="Tutup">&times;</button>
+        <img id="modal-foto" alt="" />
+        <h3 id="modal-judul"></h3>
+        <p id="modal-cerita"></p>
+      </div>
+    </div>
+
+    <!-- Tombol musik (opsional) & pesan singkat -->
+    <button id="btn-musik" aria-pressed="false" aria-label="Putar musik latar">🎵</button>
+    <div id="toast" role="status" aria-live="polite"></div>
+
+    <script>
+      /* ==========================================================================
+   KONFIGURASI — BAGIAN INI SAJA YANG SERING KAMU UBAH
+   ========================================================================== */
+      const CONFIG = {
+        // --- Data umum ---
+        namaKamu: "ahsanun niam",
+        namaPacar: "monic sayang",
+        tanggalMulai: "2023-04-07", // contoh: "2023-05-14"
+        anniversaryKe: "42", // contoh: 3
+        warnaFavorit: "pink", // warna HEX, contoh: "#8ED1C1" atau nama: "purple"
+        kenanganFavorit:
+          "hari-hari biasa bersama kamu menikmati momen-momen kecil yang indah, hingga concert date the weeknd di JIS, semuanya terasa menyenangkan bila bersama kamu💖",
+
+        // --- Musik latar (OPSIONAL) ---
+        // Isi dengan path file, contoh: "music/lagu.mp3".
+        // Kalau kosong ("") atau filenya belum ada, website tetap jalan normal.
+        lagu: "music/laguAbel.mp4",
+
+        // --- Isi surat (pakai \n untuk ganti paragraf) ---
+        surat: `Hai sayang,
+
+Makasih udah ada di hidupku, dan makasih udah mau bertahan dalam susah dan senang. Aku paling suka momen-momen kecil kita: ngobrolin hal-hal seru, ketawa hal yang sebenarnya receh, atau cuma duduk berduaan sambil nggak ngapa-ngapain.
+
+Aku tau aku bukan orang yang sempurna. Tapi kamu selalu sabar, selalu bisa bikin aku ngerasa diterima apa adanya. Itu hal yang aku hargai banget.
+
+Ke depannya, aku berharap kita selalu saling dukung pas lagi capek, pas lagi senang, pas rencana kita berhasil, dan pas semuanya berantakan. Aku ngga minta macam-macam, cuma pengen terus jalan bareng kamu, satu hari demi satu hari.
+
+Terima kasih sudah menjadi rumah yang paling nyaman buat aku.
+
+Happy anniversary honey.
+
+Dengan sayang,
+ahsan`,
+
+        // --- Daftar alasan sayang ---
+        alasan: [
+          "Karena kamu bikin hari biasa terasa spesial.",
+          "Karena ketawa kamu selalu jadi favoritku.",
+          "Karena sama kamu, aku nyaman jadi diri sendiri.",
+          "Karena kamu tetap lucu, bahkan pas lagi ngambek.",
+          "Karena kamu selalu inget hal-hal kecil yang aku sendiri lupa.",
+          "Karena pelukan kamu selalu kerasa pulang.",
+          "Karena kamu sabar dengerin cerita yang itu-itu aja.",
+          "Karena sama kamu, hari-hari kerasa lebih ringan.",
+        ],
+
+        // --- Foto galeri (3-6 foto) ---
+        // CARA GANTI FOTO:
+        //   1. Simpan fotonya di folder yang sama, misal: foto/1.jpg
+        //   2. Ubah src: "" menjadi src: "foto/1.jpg"
+        //   3. Selama src masih "", akan tampil placeholder rapi.
+        foto: [
+          { src: "foto/foto1.jpeg", judul: "Foto pertama kita", cerita: "Our first date" },
+          {
+            src: "foto/foto2.jpeg",
+            judul: "Hari yang paling terkenang",
+            cerita: "Concert date The Weeknd, dan momen-momen lain yang bikin kita ketawa bareng",
+          },
+          {
+            src: "foto/foto3.jpeg",
+            judul: "Kita berdua yang Random",
+            cerita: "Phootobooth di mall, kita berdua yang random tapi seru banget",
+          },
+          {
+            src: "foto/foto4.jpeg",
+            judul: "Momennya kamu",
+            cerita: "Pap lucu yang dulu kamu sering kirim waktu masih LDR",
+          },
+          {
+            src: "foto/foto5.jpeg",
+            judul: "Tempat favorit kita",
+            cerita: "Aku, kamu, dan absolute cinema, tempat favorit kita nonton film bareng",
+          },
+          {
+            src: "foto/foto6.jpeg",
+            judul: "Lunch, dinner, anything with you",
+            cerita: "Makan bareng kamu, anything with u is the best",
+          },
+        ],
+
+        // --- Posisi 5 hati di mini game (dalam %) ---
+        hati: [
+          { left: "12%", top: "14%" },
+          { left: "34%", top: "54%" },
+          { left: "54%", top: "18%" },
+          { left: "72%", top: "58%" },
+          { left: "88%", top: "12%" },
+        ],
+      };
+
+      /* ==========================================================================
+   1. UTILITAS KECIL
+   ========================================================================== */
+      const $ = (pilih) => document.querySelector(pilih);
+
+      // Apakah pengguna meminta animasi minim? (pengaturan HP/OS)
+      const kurangiGerak = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      // Toast kecil untuk pesan (misal: musik belum tersedia)
+      let toastTimer;
+      function tampilkanPesan(teks) {
+        const toast = $("#toast");
+        toast.textContent = teks;
+        toast.classList.add("tampil");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove("tampil"), 3200);
+      }
+
+      /* ==========================================================================
+   2. ISI HALAMAN DARI CONFIG (nama, tanggal, warna, kenangan)
+   ========================================================================== */
+      function isiDariConfig() {
+        // Warna favorit -> variabel CSS
+        try {
+          document.documentElement.style.setProperty("--aksen", CONFIG.warnaFavorit);
+        } catch (e) {}
+
+        // Judul ucapan + pita anniversary
+        $("#judul-ucapan").textContent = `Happy Anniversary, ${CONFIG.namaPacar}! 💗`;
+        $("#pita-ke").textContent = `Anniversary ke-${CONFIG.anniversaryKe} 🎀`;
+
+        // Kenangan favorit
+        $("#teks-kenangan-favorit").textContent = CONFIG.kenanganFavorit;
+
+        // Tanda tangan footer
+        $("#tanda-tangan").textContent = `— ${CONFIG.namaKamu} 💌`;
+      }
+
+      /* ==========================================================================
+   3. HITUNG HARI BERSAMA (pakai tanggal lokal, bukan UTC)
+   ========================================================================== */
+      function hitungHariBersama() {
+        const teks = $("#hari-angka");
+        const ket = $("#hari-keterangan");
+
+        // "YYYY-MM-DD" -> Date lokal (penting: new Date("2023-05-14") di JS
+        // dianggap UTC, jadi kita bikin manual supaya akurat menurut WIB/setempat)
+        const bagian = String(CONFIG.tanggalMulai).split("-");
+        const tahun = Number(bagian[0]);
+        const bulan = Number(bagian[1]);
+        const tanggal = Number(bagian[2]);
+
+        // Validasi format: tahun 4 digit, bulan 1-12, tanggal 1-31
+        const formatOk =
+          bagian.length === 3 &&
+          /^\d{4}$/.test(bagian[0]) &&
+          /^\d{1,2}$/.test(bagian[1]) &&
+          /^\d{1,2}$/.test(bagian[2]) &&
+          bulan >= 1 &&
+          bulan <= 12 &&
+          tanggal >= 1 &&
+          tanggal <= 31;
+
+        if (!formatOk) {
+          teks.textContent = "…";
+          ket.textContent = "Atur CONFIG.tanggalMulai dengan format YYYY-MM-DD, contoh: 2023-05-14";
+          return;
+        }
+        const tglMulai = new Date(tahun, bulan - 1, tanggal);
+
+        // Hari ini, dibuat jam 00.00 lokal supaya selisihnya bilangan hari bulat
+        const sekarang = new Date();
+        const hariIni = new Date(sekarang.getFullYear(), sekarang.getMonth(), sekarang.getDate());
+
+        if (isNaN(tglMulai.getTime()) || tglMulai > hariIni) {
+          teks.textContent = "…";
+          ket.textContent = "Atur CONFIG.tanggalMulai dengan tanggal yang benar ya.";
+          return;
+        }
+
+        const satuHari = 1000 * 60 * 60 * 24;
+        const jumlahHari = Math.round((hariIni - tglMulai) / satuHari);
+
+        teks.textContent = jumlahHari.toLocaleString("id-ID");
+        ket.textContent = `hari kita bersama, sejak ${tglMulai.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}`;
+      }
+
+      /* ==========================================================================
+   4. HALAMAN PEMBUKA (amplop)
+   ========================================================================== */
+      $("#btn-amplop").addEventListener("click", () => {
+        const layar = $("#layar-buka");
+        layar.classList.add("buka");
+
+        // Kalau animasi dimatikan, langsung tampilkan halaman utamanya
+        const lama = kurangiGerak ? 120 : 1150;
+
+        setTimeout(() => {
+          $("#konten").hidden = false;
+          layar.classList.add("tutup");
+          // Pindahkan fokus ke judul supaya pembaca layar & keyboard ikut masuk
+          $("#judul-ucapan").setAttribute("tabindex", "-1");
+          $("#judul-ucapan").focus();
+          window.scrollTo(0, 0);
+          jalankanReveal();
+        }, lama);
+      });
+
+      /* ==========================================================================
+   5. TOMBOL "LIHAT CERITA KITA" -> scroll ke galeri
+   ========================================================================== */
+      $("#btn-cerita").addEventListener("click", () => {
+        $("#kenangan").scrollIntoView({ behavior: kurangiGerak ? "auto" : "smooth", block: "start" });
+      });
+
+      /* ==========================================================================
+   6. EFEK MUNCUL SAAT DI-SCROLL
+   ========================================================================== */
+      function jalankanReveal() {
+        const elemen = document.querySelectorAll(".reveal");
+        if (kurangiGerak || !("IntersectionObserver" in window)) {
+          elemen.forEach((el) => el.classList.add("tampil"));
+          return;
+        }
+        const pengamat = new IntersectionObserver(
+          (entri) => {
+            entri.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add("tampil");
+                pengamat.unobserve(e.target);
+              }
+            });
+          },
+          { threshold: 0.12 },
+        );
+        elemen.forEach((el) => pengamat.observe(el));
+      }
+
+      /* ==========================================================================
+   7. GALERI KENANGAN + MODAL
+   ========================================================================== */
+
+      // Placeholder rapi kalau foto belum diisi
+      function fotoPlaceholder(teks) {
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600">
+  <rect width="600" height="600" fill="#FFEAF1"/>
+  <rect x="30" y="30" width="540" height="540" rx="24" fill="none" stroke="#FFB3CC" stroke-width="6" stroke-dasharray="18 14"/>
+  <path d="M300 300 c-46 -40 -100 -66 -100 -112 c0 -30 24 -50 52 -50 c20 0 36 12 48 30 c12 -18 28 -30 48 -30 c28 0 52 20 52 50 c0 46 -54 72 -100 112 z" fill="#FF8FB1"/>
+  <text x="300" y="420" font-family="Segoe UI, Arial, sans-serif" font-size="34" fill="#7A5A6A" text-anchor="middle">Foto belum diisi</text>
+  <text x="300" y="470" font-family="Segoe UI, Arial, sans-serif" font-size="26" fill="#9B7B8B" text-anchor="middle">${teks}</text>
+</svg>`;
+        return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+      }
+
+      function renderGaleri() {
+        const grid = $("#galeri-grid");
+        grid.innerHTML = "";
+
+        CONFIG.foto.forEach((f, i) => {
+          const adaFoto = f.src && f.src.trim() !== "";
+          const kartu = document.createElement("button");
+          kartu.type = "button";
+          kartu.className = "polaroid";
+          kartu.setAttribute("aria-label", `Buka cerita: ${f.judul}`);
+
+          const img = document.createElement("img");
+          img.src = adaFoto ? f.src : fotoPlaceholder("ganti di CONFIG.foto");
+          img.alt = f.judul;
+          img.loading = "lazy";
+
+          const cap = document.createElement("span");
+          cap.className = "caption";
+          cap.textContent = f.judul;
+
+          kartu.appendChild(img);
+          kartu.appendChild(cap);
+
+          if (!adaFoto) {
+            const petunjuk = document.createElement("span");
+            petunjuk.className = "petunjuk-kecil";
+            petunjuk.textContent = "(klik untuk cara pasang foto)";
+            kartu.appendChild(petunjuk);
+          }
+
+          kartu.addEventListener("click", () => bukaModal(i));
+          grid.appendChild(kartu);
+        });
+      }
+
+      let fokusSebelum = null;
+
+      function bukaModal(i) {
+        const f = CONFIG.foto[i];
+        const adaFoto = f.src && f.src.trim() !== "";
+        $("#modal-foto").src = adaFoto ? f.src : fotoPlaceholder("ganti di CONFIG.foto");
+        $("#modal-foto").alt = f.judul;
+        $("#modal-judul").textContent = f.judul;
+        $("#modal-cerita").textContent =
+          f.cerita + (adaFoto ? "" : '\n\nCara ganti foto: ubah src: "" jadi src: "foto/1.jpg" di bagian CONFIG.foto.');
+
+        fokusSebelum = document.activeElement;
+        $("#modal").hidden = false;
+        $("#modal-tutup").focus();
+        document.body.style.overflow = "hidden"; // kunci scroll di belakang modal
+      }
+
+      function tutupModal() {
+        $("#modal").hidden = true;
+        document.body.style.overflow = "";
+        if (fokusSebelum) fokusSebelum.focus();
+      }
+
+      $("#modal-tutup").addEventListener("click", tutupModal);
+      // Klik area gelap di luar kotak juga menutup
+      $("#modal").addEventListener("click", (e) => {
+        if (e.target.id === "modal") tutupModal();
+      });
+      // Tombol Escape
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && !$("#modal").hidden) tutupModal();
+      });
+
+      /* ==========================================================================
+   8. ALASAN SAYANG (tanpa pengulangan sampai habis)
+   ========================================================================== */
+      let tumpukanAlasan = [];
+
+      function acakAlasan() {
+        const salinan = CONFIG.alasan.slice();
+        for (let i = salinan.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [salinan[i], salinan[j]] = [salinan[j], salinan[i]];
+        }
+        tumpukanAlasan = salinan;
+      }
+
+      $("#btn-alasan").addEventListener("click", () => {
+        if (tumpukanAlasan.length === 0) acakAlasan(); // habis? acak ulang
+        const teks = tumpukanAlasan.pop();
+
+        const kotak = $("#kotak-alasan");
+        kotak.innerHTML = "";
+        const span = document.createElement("span");
+        span.className = "alasan-baru";
+        span.textContent = teks;
+        kotak.appendChild(span);
+      });
+
+      /* ==========================================================================
+   9. MINI GAME CARI HATI
+   ========================================================================== */
+      let hatiKetemu = 0;
+
+      function renderHati() {
+        const area = $("#area-hati");
+        area.innerHTML = "";
+        hatiKetemu = 0;
+        $("#progres-hati").textContent = `0 dari ${CONFIG.hati.length} hati terkumpul`;
+        $("#pesan-hadiah").classList.remove("tampil");
+
+        CONFIG.hati.forEach((posisi, i) => {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "hati";
+          b.style.left = posisi.left;
+          b.style.top = posisi.top;
+          b.style.animationDelay = i * 0.25 + "s";
+          b.textContent = "💗";
+          b.setAttribute("aria-label", `Hati nomor ${i + 1}`);
+
+          b.addEventListener("click", () => {
+            if (b.disabled) return; // hati ini sudah dihitung sekali saja
+            b.disabled = true;
+            b.classList.add("ketemu");
+            b.setAttribute("aria-hidden", "true");
+
+            hatiKetemu++;
+            $("#progres-hati").textContent = `${hatiKetemu} dari ${CONFIG.hati.length} hati terkumpul`;
+
+            if (hatiKetemu === CONFIG.hati.length) {
+              $("#pesan-hadiah").classList.add("tampil");
+              confetti(2200);
+            }
+          });
+
+          area.appendChild(b);
+        });
+      }
+
+      /* ==========================================================================
+   10. CONFETTI (sederhana, murni CSS/JS)
+   ========================================================================== */
+      function confetti(lama = 2000) {
+        if (kurangiGerak) return; // hormati preferensi animasi minim
+
+        const wadah = document.createElement("div");
+        wadah.className = "confetti-wadah";
+        const warna = ["#FF6F9C", "#FFD166", "#8ED1C1", CONFIG.warnaFavorit, "#C93B66", "#B39DDB"];
+        const jumlah = 60;
+
+        for (let i = 0; i < jumlah; i++) {
+          const b = document.createElement("div");
+          b.className = "biji";
+          b.style.left = Math.random() * 100 + "vw";
+          b.style.background = warna[Math.floor(Math.random() * warna.length)];
+          b.style.animationDuration = 1.6 + Math.random() * 1.4 + "s";
+          b.style.animationDelay = Math.random() * 0.5 + "s";
+          b.style.width = 7 + Math.random() * 7 + "px";
+          b.style.height = 10 + Math.random() * 10 + "px";
+          if (Math.random() > 0.5) b.style.borderRadius = "50%";
+          wadah.appendChild(b);
+        }
+
+        document.body.appendChild(wadah);
+        setTimeout(() => wadah.remove(), lama + 2200);
+      }
+
+      /* ==========================================================================
+   11. SURAT — efek mengetik + tombol tampilkan sekaligus
+   ========================================================================== */
+      let timerKetik = null;
+
+      $("#btn-surat").addEventListener("click", () => {
+        const kotak = $("#kotak-surat");
+        const isi = $("#isi-surat");
+        const kursor = $("#kursor");
+
+        kotak.hidden = false;
+        $("#btn-surat-lengkap").hidden = false;
+        kotak.scrollIntoView({ behavior: kurangiGerak ? "auto" : "smooth", block: "center" });
+
+        clearInterval(timerKetik);
+
+        // Animasi minim: langsung tampilkan seluruh surat
+        if (kurangiGerak) {
+          isi.textContent = CONFIG.surat;
+          kursor.style.display = "none";
+          return;
+        }
+
+        isi.textContent = "";
+        kursor.style.display = "inline-block";
+        let i = 0;
+
+        timerKetik = setInterval(() => {
+          isi.textContent = CONFIG.surat.slice(0, i);
+          i++;
+          if (i > CONFIG.surat.length) {
+            clearInterval(timerKetik);
+            kursor.style.display = "none";
+          }
+        }, 22);
+      });
+
+      // Tombol: langsung tampilkan seluruh surat (selesai mengetik)
+      $("#btn-surat-lengkap").addEventListener("click", () => {
+        clearInterval(timerKetik);
+        $("#isi-surat").textContent = CONFIG.surat;
+        $("#kursor").style.display = "none";
+      });
+
+      /* ==========================================================================
+   12. KEJUTAN TERAKHIR
+   ========================================================================== */
+      $("#btn-mau").addEventListener("click", () => {
+        const j = $("#jawaban");
+        j.textContent = "Yeay! Petualangan kita masih panjang. 🎉";
+        j.classList.add("tampil");
+        confetti(2600);
+      });
+
+      $("#btn-traktir").addEventListener("click", () => {
+        const j = $("#jawaban");
+        j.textContent = "Siap, sayang. Kamu pilih makanannya! 😋";
+        j.classList.add("tampil");
+        confetti(1600);
+      });
+
+      /* ==========================================================================
+   13. MUSIK LATAR (OPSIONAL)
+   Hanya diputar setelah tombol ditekan. Kalau file tidak ada,
+   muncul pesan singkat dan website tetap berjalan normal.
+   ========================================================================== */
+      let audio = null;
+      let musikNyala = false;
+
+      $("#btn-musik").addEventListener("click", async () => {
+        const btn = $("#btn-musik");
+
+        if (!CONFIG.lagu || CONFIG.lagu.trim() === "") {
+          tampilkanPesan('Belum ada file musik. Isi CONFIG.lagu (contoh: "music/lagu.mp3") 🎵');
+          return;
+        }
+
+        if (!audio) {
+          audio = new Audio(CONFIG.lagu);
+          audio.loop = true;
+          audio.addEventListener("error", () => {
+            audio = null; // reset supaya bisa dicoba lagi
+            musikNyala = false;
+            btn.textContent = "🎵";
+            btn.setAttribute("aria-pressed", "false");
+            tampilkanPesan("File musik tidak ditemukan. Website tetap jalan kok 🤍");
+          });
+        }
+
+        try {
+          if (!musikNyala) {
+            await audio.play();
+            musikNyala = true;
+            btn.textContent = "⏸️";
+            btn.setAttribute("aria-pressed", "true");
+            btn.setAttribute("aria-label", "Jeda musik latar");
+          } else {
+            audio.pause();
+            musikNyala = false;
+            btn.textContent = "🎵";
+            btn.setAttribute("aria-pressed", "false");
+            btn.setAttribute("aria-label", "Putar musik latar");
+          }
+        } catch (err) {
+          // Browser menolak pemutaran / file belum ada -> tidak apa-apa
+          musikNyala = false;
+          tampilkanPesan("Musik belum bisa diputar. Cek file di CONFIG.lagu 🎵");
+        }
+      });
+
+      /* ==========================================================================
+   14. MULAI
+   ========================================================================== */
+      isiDariConfig();
+      hitungHariBersama();
+      renderGaleri();
+      renderHati();
+    </script>
+  </body>
+</html>
